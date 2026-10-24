@@ -1,7 +1,33 @@
-.zdic-word-mark {
-  background: #fff280 !important;
-  cursor: pointer !important;
+#zdic-hover-tip {
+  position: fixed;
+  z-index: 999999;
+  pointer-events: none;
+  background: #fff280;
+  color: #000;
+  padding: 2px 6px;
   border-radius: 3px;
-  padding: 0 1px;
-  transition: none !important;
+  font-size: 16px;
+  display: none;
+}
+#zdic-hover-tip.show {
+  display: block;
+}
+/* 开启插件模式全局小手光标 */
+body.zdic-hand-cursor * {
+  cursor: pointer !important;
+}
+
+#zdic-hover-tip {
+  position: fixed;
+  z-index: 999999;
+  pointer-events: none;
+  background: #fff280;
+  color: #000;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 16px;
+  display: none;
+}
+#zdic-hover-tip.show {
+  display: block;
 }
