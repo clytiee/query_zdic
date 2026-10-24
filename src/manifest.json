@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "汉典单字查询",
+  "version": "1.0",
+  "description": "激活后鼠标悬停汉字高亮，点击打开汉典",
+  "permissions": ["activeTab"],
+  "action": {
+    "default_icon": {
+      "128": "icon.png"
+    },
+    "default_title": "开启/关闭汉典取字模式"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["style.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
