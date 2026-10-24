@@ -92,3 +92,11 @@ document.addEventListener("mousemove", (e) => {
     tipEl.classList.remove("show");
   }
 });
+
+// Esc 按键退出模式
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && isActive) {
+    // 通知background关闭当前tab模式
+    chrome.runtime.sendMessage({ type: "escTurnOff" });
+  }
+});

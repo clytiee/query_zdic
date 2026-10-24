@@ -26,6 +26,18 @@ chrome.action.onClicked.addListener(async (tab) => {
   }
 });
 
+// 新增：接收Esc关闭指令
+chrome.runtime.onMessage.addListener(async (msg, sender) => {
+  if(msg.type === "escTurnOff" && sender.tab?.id){
+    const tabId = sender.tab.id;
+    tabState.set(tabId, false);
+    await chrome.action.setBadgeText({tabId, text:""});
+    try{
+      await chrome.tabs.sendMessage(tabId, {type:"toggle", active:false});
+    }catch(e){}
+  }
+});
+
 // 标签关闭，清理状态
 chrome.tabs.onRemoved.addListener((tabId)=>{
   tabState.delete(tabId);
