@@ -24,10 +24,38 @@ function getCharAtPoint(x, y) {
   const offset = pos.offset || pos.startOffset;
 
   if (!textNode || textNode.nodeType !== Node.TEXT_NODE) return null;
-  const ch = textNode.textContent[offset];
+  const text = textNode.textContent;
+  const textLen = text.length;
+  if (textLen === 0) return null;
 
-  if (!/[\u4e00-\u9fa5]/.test(ch)) return null;
-  return { char: ch };
+  // 检测某个字符下标，鼠标是否在它包围盒内
+  function testIndex(idx) {
+    if (idx < 0 || idx >= textLen) return null;
+    const ch = text[idx];
+    if (!/[\u4e00-\u9fa5]/.test(ch)) return null;
+    const r = document.createRange();
+    r.setStart(textNode, idx);
+    r.setEnd(textNode, idx + 1);
+    const rect = r.getBoundingClientRect();
+    // 允许±1像素容差，对付字体渲染像素偏差
+    const inside = (
+      x >= rect.left - 1 &&
+      x <= rect.right + 1 &&
+      y >= rect.top - 1 &&
+      y <= rect.bottom + 1
+    );
+    return inside ? ch : null;
+  }
+
+  // 优先：浏览器给的offset位置
+  let ch = testIndex(offset);
+  if (ch) return { char: ch };
+
+  // 如果offset的字符不包含鼠标，尝试左边相邻字符（修复A字右侧区域识别成B）
+  ch = testIndex(offset - 1);
+  if (ch) return { char: ch };
+
+  return null;
 }
 
 // 点击取字跳转
